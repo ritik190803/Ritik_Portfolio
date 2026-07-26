@@ -1,174 +1,175 @@
-function _extends() { return _extends = Object.assign ? Object.assign.bind() : function (n) { for (var e = 1; e < arguments.length; e++) { var t = arguments[e]; for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]); } return n; }, _extends.apply(null, arguments); }
+const e = React.createElement;
 const {
   useEffect,
   useState,
   useRef,
-  useCallback,
-  useMemo
+  useCallback
 } = React;
 
-/* ─── Data ─── */
+/* ─────────────────────────── Data ─────────────────────────── */
 
-const roles = ["Full Stack Developer", "Problem Solver", "Backend Engineer", "CSE Student"];
+const roles = ["Software Engineer", "Full-Stack Developer", "SDE Intern @ Renu Electronics", "Real-Time Systems Enthusiast"];
 const projects = [{
   id: "cryuze",
   title: "Cryuze",
   tag: "Service Marketplace",
-  desc: "A service marketplace platform with real-time chat, payment integration, and modular backend architecture.",
-  highlights: ["JWT Auth & RBAC", "Razorpay Payments", "Real-Time Chat", "REST API Design"],
-  stack: ["React", "Node.js", "MongoDB", "Socket.IO", "Razorpay"],
-  href: "https://github.com/Saurabh-kumar-singh201/Cryuze",
-  span: "lg:col-span-2 lg:row-span-1",
-  accent: "#34d399"
-}, {
-  id: "protype",
-  title: "ProType",
-  tag: "Real-Time Multiplayer",
-  desc: "A synchronized typing race platform where players compete on speed and accuracy in real-time rooms.",
-  highlights: ["Socket.IO Sync", "Multiplayer Rooms", "Live Leaderboards", "Host Controls", "Real-Time Events"],
-  stack: ["HTML", "CSS", "JS", "Node.js", "Express", "Socket.IO"],
-  href: "https://github.com/Saurabh-kumar-singh201/proType",
-  demo: "https://protypex.vercel.app/",
+  desc: "A full-stack MERN marketplace connecting users with services — secure auth, live chat, and payments, built to handle real booking workflows end to end.",
+  highlights: ["JWT Auth & RBAC", "Razorpay Payments", "Socket.IO Live Chat", "Responsive Tailwind UI"],
+  stack: ["React", "Node.js", "Express", "MongoDB", "Socket.IO", "Razorpay"],
+  href: "https://github.com/ritik190803/CRYUZE",
   span: "lg:col-span-2 lg:row-span-2",
-  accent: "#00d4ff",
-  featured: true
+  accent: "#00d4ff"
 }, {
-  id: "yggdrasil",
-  title: "Yggdrasil",
-  tag: "Social Platform",
-  desc: "A personality-driven social platform for questions, discovery, and community matching.",
-  highlights: ["JWT Auth", "PostgreSQL Schema", "Responsive UI", "Community Flows"],
-  stack: ["React", "Vite", "Tailwind", "Node.js", "JWT", "PostgreSQL"],
-  href: "https://github.com/Saurabh-kumar-singh201/Yggdrasil",
-  demo: "https://yggdrasil-zeta.vercel.app/",
-  span: "",
+  id: "qate",
+  title: "QATE",
+  tag: "Research · Scheduling",
+  desc: "Quality-Aware Task Execution — a reward-driven scheduling framework for heterogeneous real-time systems, simulating task assignment across cores for higher throughput.",
+  highlights: ["Deadline-Critical Scheduling", "Energy-Efficiency Optimization", "Throughput Analysis"],
+  stack: ["Python"],
+  href: "https://github.com/ritik190803/QATE",
+  span: "lg:col-span-2",
   accent: "#7c5cfc"
 }, {
   id: "fakecurrency",
   title: "Fake Currency Detection",
   tag: "Computer Vision",
-  desc: "Detects counterfeit currency using image comparison and SSIM analysis with OpenCV.",
-  highlights: ["Python", "OpenCV", "SSIM Analysis", "Tkinter GUI"],
-  stack: ["Python", "OpenCV", "Tkinter", "SSIM"],
-  href: "",
+  desc: "An ML pipeline that flags counterfeit ₹500 notes by comparing structural similarity against genuine reference images.",
+  highlights: ["Image Comparison", "SSIM Analysis", "OpenCV Pipeline"],
+  stack: ["Python", "OpenCV", "ML"],
+  href: "https://github.com/ritik190803/Fake-Currency-Detection",
+  span: "",
+  accent: "#34d399"
+}, {
+  id: "bezier",
+  title: "Bézier Curve Simulation",
+  tag: "Physics · Visualization",
+  desc: "A playful experiment rendering cubic Bézier curves as dynamic, springy ropes — with auto-simulation and a precise manual 'architect' mode.",
+  highlights: ["Physics-Based Motion", "Canvas Rendering", "Interactive Controls"],
+  stack: ["JavaScript", "HTML5 Canvas"],
+  href: "https://github.com/ritik190803/Flam-B-zier-Curve-Simulation-Project",
   span: "",
   accent: "#f59e0b"
 }, {
-  id: "habittracker",
-  title: "HabitTracker",
-  tag: "Habit Tracking",
-  desc: "A simple habit tracker with JWT-authenticated user accounts and MongoDB persistence, deployed via a split frontend-backend architecture.",
-  highlights: ["JWT Auth", "MongoDB Persistence", "Habit CRUD", "User Accounts"],
-  stack: ["HTML", "CSS", "JS", "Node.js", "Express", "MongoDB"],
-  href: "https://github.com/Saurabh-kumar-singh201/HabitTracker",
-  demo: "https://habit-tracker-alpha-ochre.vercel.app",
+  id: "shoesui",
+  title: "Shoes UI Template",
+  tag: "Frontend Template",
+  desc: "An early-stage shoe-shop storefront focused on a clean, user-friendly layout for showcasing footwear products.",
+  highlights: ["Component Library", "Product Grid", "Responsive Layout"],
+  stack: ["React"],
+  href: "https://github.com/ritik190803/Shoes-Ui-Template-react",
   span: "",
-  accent: "#10b981"
+  accent: "#f472b6"
 }, {
-  id: "contemplatio",
-  title: "Contemplatio",
-  tag: "Stoic Todo App",
-  desc: "A minimalist todo application embodying stoic philosophy — focus on what matters, eliminate the superfluous, act with intention.",
-  highlights: ["Todo Management", "Stoic Philosophy UI", "Minimal Design", "Bare-Metal JS"],
-  stack: ["HTML", "CSS", "JavaScript"],
-  href: "https://github.com/Saurabh-kumar-singh201/Contemplatio",
-  demo: "https://contemplatio-five.vercel.app",
-  span: "",
-  accent: "#d4a574"
-}, {
-  id: "kachraconnect",
-  title: "kachraConnect",
-  tag: "Waste Management",
-  desc: "A smart waste management platform with JWT auth, report filing, dashboard, and file uploads — connecting citizens to sanitation services.",
-  highlights: ["JWT Auth", "Report Filing", "Dashboard", "File Uploads"],
-  stack: ["HTML", "CSS", "JS", "Node.js", "Express", "JWT"],
-  href: "https://github.com/Saurabh-kumar-singh201/kachraConnect",
+  id: "contactui",
+  title: "Contact UI React",
+  tag: "Form System",
+  desc: "A reusable React contact form for collecting and storing name, email, and message data with a clean, minimal layout.",
+  highlights: ["Form Validation", "Clean UX", "Reusable Components"],
+  stack: ["React"],
+  href: "https://github.com/ritik190803/Contact_UI_React",
   span: "",
   accent: "#14b8a6"
 }];
 const techStack = [{
   category: "Languages",
-  items: ["Java", "JavaScript", "Python"],
+  items: ["Java", "Python", "JavaScript", "TypeScript", "SQL", "C/C++"],
   icon: ">"
 }, {
-  category: "Frontend",
-  items: ["React", "HTML", "CSS", "Tailwind"],
+  category: "Web Dev",
+  items: ["React", "Angular", "Node.js", "Express.js", "Tailwind CSS"],
   icon: "}"
 }, {
-  category: "Backend",
-  items: ["Node.js", "Express", "REST APIs"],
-  icon: "/"
+  category: "Cloud & Streaming",
+  items: ["AWS", "AWS Kinesis", "WebRTC", "FFmpeg"],
+  icon: "~"
 }, {
-  category: "Databases",
-  items: ["MongoDB", "MySQL", "PostgreSQL"],
-  icon: "$"
-}, {
-  category: "Tools",
-  items: ["Git", "GitHub", "VS Code", "IntelliJ"],
+  category: "DevOps & Tools",
+  items: ["Docker", "Git", "GitLab", "GitHub", "Linux"],
   icon: "&"
+}, {
+  category: "Core CS",
+  items: ["DSA", "OOP", "Operating Systems", "Computer Networks", "DBMS"],
+  icon: "#"
 }];
-const dsaTopics = ["Arrays", "Trees", "Graphs", "DP", "Binary Search", "Greedy", "Backtracking"];
+const dsaTopics = ["Arrays", "Trees", "Graphs", "DP", "Binary Search", "Greedy", "Recursion"];
+const experience = {
+  company: "Renu Electronics, Pune",
+  role: "Software Development Engineer Intern",
+  period: "Jan 2026 — Present",
+  points: ["Developing a CCTV web application using the MERN stack with AWS Kinesis for cloud-based real-time video streaming and monitoring.", "Building scalable deployment workflows with Docker, Docker Hub, and Ubuntu-based Linux environments.", "Contributing to low-latency media pipelines using WebRTC, AWS Kinesis, and FFmpeg for real-time video transmission.", "Managing version control and collaborative development via Git, GitLab, and GitHub in production-level projects."]
+};
+const achievements = [{
+  label: "DSA Problems Solved",
+  value: "400+",
+  detail: "Across LeetCode and CodeChef"
+}, {
+  label: "JEE Mains 2022",
+  value: "AIR 23,853",
+  detail: "97.4 percentile — top 2.5% nationwide"
+}, {
+  label: "NTSE",
+  value: "Qualified",
+  detail: "National Talent Search Examination"
+}, {
+  label: "Science Olympiad",
+  value: "Qualified",
+  detail: "National-level science olympiad"
+}];
+const responsibilities = [{
+  title: "Health Club Coordinator",
+  org: "IIIT Guwahati",
+  desc: "Coordinated health-related events and workshops for the Student Welfare Board."
+}, {
+  title: "Event Management Core Team",
+  org: "Yuvaan — Cultural Fest",
+  desc: "Planned and executed major fest events, including Mock CID and Whimsical Debates."
+}];
 const contacts = [{
   label: "GitHub",
-  href: "https://github.com/Saurabh-kumar-singh201"
+  href: "https://github.com/ritik190803"
 }, {
   label: "LinkedIn",
-  href: "https://www.linkedin.com/in/saurabh-kumar-singh-135a452a2/?skipRedirect=true"
+  href: "https://www.linkedin.com/in/ritik-kumar-singh-50b0b9265/"
 }, {
   label: "LeetCode",
-  href: "https://leetcode.com/u/saurabh_201/"
+  href: "https://leetcode.com/u/ritiksinghchauhan101/"
 }, {
-  label: "Email",
-  href: "mailto:saurabhsingh201619@gmail.com"
+  label: "CodeChef",
+  href: "https://www.codechef.com/users/wisdom_hill_88"
 }];
 const terminalCommands = {
   help: {
-    output: ["Available commands:", "  about      — Who I am", "  skills     — Technical stack", "  projects   — Featured projects", "  leetcode   — DSA progress", "  resume     — Download resume", "  contact    — Get in touch", "  clear      — Clear terminal", "  whoami     — Guess what"]
+    output: ["Available commands:", "  about        — Who I am", "  experience   — Current role", "  skills       — Technical stack", "  projects     — Featured projects", "  achievements — Milestones", "  contact      — Get in touch", "  clear        — Clear terminal", "  whoami       — Guess what"]
   },
   about: {
-    output: ["Saurabh Kumar Singh", "B.Tech CSE (IoT) @ NIET", "Building systems, not just websites.", "Full-stack developer · 350+ DSA problems · Open source"]
+    output: ["Ritik Kumar Singh", "B.Tech CSE @ IIIT Guwahati (Expected 2026)", "Full-stack developer working on real-time video systems.", "400+ DSA problems · MERN · AWS Kinesis · WebRTC"]
+  },
+  experience: {
+    output: ["Renu Electronics, Pune — SDE Intern (Jan 2026 – Present)", "Building a CCTV web app: MERN + AWS Kinesis + WebRTC + FFmpeg", "Docker-based deployment workflows on Linux"]
   },
   skills: {
-    output: ["Languages:  Java, JavaScript, Python", "Frontend:   React, Vite, Tailwind, HTML, CSS", "Backend:    Node.js, Express, REST APIs, JWT", "Databases:  MongoDB, MySQL, PostgreSQL", "Tools:      Git, GitHub, VS Code, IntelliJ IDEA", "Core:       DSA, OOP, OS, DBMS, Computer Networks"]
+    output: ["Languages:  Java, Python, JavaScript, TypeScript, SQL, C/C++", "Web:        React, Angular, Node.js, Express.js, Tailwind CSS", "Cloud:      AWS, AWS Kinesis, WebRTC, FFmpeg", "DevOps:     Docker, Git, GitLab, GitHub, Linux", "Core:       DSA, OOP, OS, Computer Networks, DBMS"]
   },
   projects: {
-    output: ["Cryuze    — Service Marketplace (React, Node, MongoDB, Socket.IO)", "ProType   — Real-Time Typing Arena (Socket.IO, Express)", "Yggdrasil — Social Platform (React, PostgreSQL, JWT)", "Fake Currency Detection — Python, OpenCV, SSIM"]
+    output: ["Cryuze         — Service Marketplace (MERN, Socket.IO, Razorpay)", "QATE           — Real-Time Task Scheduling Research (Python)", "Fake Currency Detection — Computer Vision (Python, OpenCV)", "Bézier Curve Simulation — Physics Visualization (JS, Canvas)"]
   },
-  leetcode: {
-    output: ["350+ Problems Solved", "", "Topics: Arrays, Trees, Graphs, DP, Binary Search, Greedy, Backtracking", "Profile: https://leetcode.com/u/saurabh_201/"]
-  },
-  resume: {
-    output: ["Opening resume PDF..."]
+  achievements: {
+    output: ["400+ problems solved — LeetCode & CodeChef", "JEE Mains 2022 — AIR 23,853 (97.4 percentile)", "NTSE & Science Olympiad qualifier"]
   },
   contact: {
-    output: ["GitHub:   https://github.com/Saurabh-kumar-singh201", "LinkedIn: https://linkedin.com/in/saurabh-kumar-singh-135a452a2/", "LeetCode: https://leetcode.com/u/saurabh_201/", "Email:    saurabhsingh201619@gmail.com"]
+    output: ["GitHub:   https://github.com/ritik190803", "LinkedIn: https://linkedin.com/in/ritik-kumar-singh-50b0b9265", "LeetCode: https://leetcode.com/u/ritiksinghchauhan101", "CodeChef: https://codechef.com/users/wisdom_hill_88", "Email:    ritiksingh1915@gmail.com", "Phone:    +91-6203172327"]
   },
   whoami: {
-    output: ["> saurabh", "", "A developer who turns ideas into reliable products.", "Thinks in systems. Codes with purpose."]
+    output: ["> ritik", "", "A developer who ships real-time systems, not just demos.", "Thinks in pipelines. Debugs with patience."]
   }
 };
-const skillLevels = {
-  "Java": 85,
-  "JavaScript": 92,
-  "Python": 78,
-  "React": 86,
-  "HTML": 90,
-  "CSS": 88,
-  "Tailwind": 90,
-  "Node.js": 82,
-  "Express": 80,
-  "MongoDB": 78,
-  "MySQL": 72,
-  "PostgreSQL": 70,
-  "Git": 85,
-  "GitHub": 88,
-  "VS Code": 90,
-  "IntelliJ": 80
-};
 
-/* ─── Hooks ─── */
+/* ─────────────────────────── Hooks ─────────────────────────── */
 
-function useTypewriter(words, typingSpeed = 75, deletingSpeed = 40, pauseTime = 1400) {
+function useTypewriter(words, typingSpeed, deletingSpeed, pauseTime) {
+  typingSpeed = typingSpeed || 70;
+  deletingSpeed = deletingSpeed || 38;
+  pauseTime = pauseTime || 1300;
   const [text, setText] = useState("");
   const [wordIdx, setWordIdx] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -186,30 +187,10 @@ function useTypewriter(words, typingSpeed = 75, deletingSpeed = 40, pauseTime = 
       }, isDeleting ? deletingSpeed : typingSpeed);
     }
     return () => clearTimeout(timeout);
-  }, [text, wordIdx, isDeleting, words, typingSpeed, deletingSpeed, pauseTime]);
+  }, [text, wordIdx, isDeleting]);
   return text;
 }
-
-/* ─── Components ─── */
-
-function Section({
-  children,
-  className = "",
-  id
-}) {
-  return /*#__PURE__*/React.createElement("section", {
-    id: id,
-    className: `py-24 md:py-32 ${className}`
-  }, children);
-}
-function SectionLabel({
-  children
-}) {
-  return /*#__PURE__*/React.createElement("p", {
-    className: "font-mono text-xs font-semibold uppercase tracking-[0.25em] text-cyan"
-  }, children);
-}
-function useInView(options = {}) {
+function useInView() {
   const ref = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
@@ -226,52 +207,78 @@ function useInView(options = {}) {
       }
     }, {
       threshold: 0.15,
-      rootMargin: "0px 0px -40px 0px",
-      ...options
+      rootMargin: "0px 0px -40px 0px"
     });
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
   return [ref, isVisible];
 }
-function useCountUp(target, start = 1, duration = 1100) {
+function useCountUp(target, duration) {
+  duration = duration || 1100;
   const [ref, isVisible] = useInView();
-  const [count, setCount] = useState(start);
+  const [count, setCount] = useState(0);
   useEffect(() => {
     if (!isVisible) return;
-    let frameId;
-    let startTime;
-    const step = timestamp => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      const nextValue = Math.floor(start + (target - start) * progress);
-      setCount(nextValue);
-      if (progress < 1) {
-        frameId = window.requestAnimationFrame(step);
-      }
+    let frameId, startTime;
+    const step = ts => {
+      if (!startTime) startTime = ts;
+      const progress = Math.min((ts - startTime) / duration, 1);
+      setCount(Math.floor(target * progress));
+      if (progress < 1) frameId = window.requestAnimationFrame(step);
     };
     frameId = window.requestAnimationFrame(step);
     return () => window.cancelAnimationFrame(frameId);
-  }, [isVisible, start, target, duration]);
+  }, [isVisible]);
   return [ref, count];
 }
-function ScrollReveal({
-  children,
-  className = '',
-  delay = 0,
-  rotate = false
-}) {
+
+/* ─────────────────────────── Shared bits ─────────────────────────── */
+
+function ScrollReveal(props) {
   const [ref, isVisible] = useInView();
-  return /*#__PURE__*/React.createElement("div", {
+  const className = props.className || "";
+  const delay = props.delay || 0;
+  const rotate = props.rotate || false;
+  return e("div", {
     ref: ref,
     className: `reveal ${isVisible ? "is-visible" : ""} ${rotate ? "reveal-tilt" : ""} ${className}`,
     style: {
       transitionDelay: `${delay}s`
     }
-  }, children);
+  }, props.children);
+}
+function SectionLabel(props) {
+  return e("p", {
+    className: "font-mono text-xs font-semibold uppercase tracking-[0.25em] text-cyan"
+  }, props.children);
+}
+function TiltCard(props) {
+  const ref = useRef(null);
+  const handleMouseMove = ev => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = ev.clientX - rect.left;
+    const y = ev.clientY - rect.top;
+    const cx = rect.width / 2,
+      cy = rect.height / 2;
+    const rotateX = (y - cy) / cy * -6;
+    const rotateY = (x - cx) / cx * 6;
+    ref.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01,1.01,1.01)`;
+  };
+  const handleMouseLeave = () => {
+    if (!ref.current) return;
+    ref.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
+  };
+  return e("div", {
+    ref: ref,
+    onMouseMove: handleMouseMove,
+    onMouseLeave: handleMouseLeave,
+    className: `tilt-card ${props.className || ""}`
+  }, props.children);
 }
 
-/* ─── Particle Field ─── */
+/* Particle field — ambient canvas background for the hero */
 
 function ParticleField() {
   const canvasRef = useRef(null);
@@ -279,24 +286,24 @@ function ParticleField() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    let animId;
-    let particles = [];
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initParticles();
-    };
+    let animId,
+      particles = [];
     const initParticles = () => {
-      const count = Math.max(20, Math.min(80, Math.floor(canvas.width * canvas.height / 15000)));
+      const count = Math.max(20, Math.min(70, Math.floor(canvas.width * canvas.height / 16000)));
       particles = Array.from({
         length: count
       }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 1.5 + 0.5
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.4 + 0.5
       }));
+    };
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
     };
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -307,17 +314,17 @@ function ParticleField() {
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(0, 212, 255, 0.25)";
+        ctx.fillStyle = "rgba(0, 212, 255, 0.22)";
         ctx.fill();
         for (let j = i + 1; j < particles.length; j++) {
-          const dx = p.x - particles[j].x;
-          const dy = p.y - particles[j].y;
+          const dx = p.x - particles[j].x,
+            dy = p.y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 130) {
+          if (dist < 120) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(0, 212, 255, ${(0.07 * (1 - dist / 130)).toFixed(3)})`;
+            ctx.strokeStyle = `rgba(0, 212, 255, ${(0.06 * (1 - dist / 120)).toFixed(3)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -333,7 +340,7 @@ function ParticleField() {
       window.removeEventListener("resize", resize);
     };
   }, []);
-  return /*#__PURE__*/React.createElement("canvas", {
+  return e("canvas", {
     ref: canvasRef,
     className: "fixed inset-0 pointer-events-none z-0",
     style: {
@@ -342,7 +349,28 @@ function ParticleField() {
   });
 }
 
-/* ─── Scroll Progress ─── */
+/* Ambient "live" badge — a nod to Ritik's real-time video streaming work */
+
+function FeedBadge() {
+  const [uptime, setUptime] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setUptime(u => u + 1), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const mins = String(Math.floor(uptime / 60)).padStart(2, "0");
+  const secs = String(uptime % 60).padStart(2, "0");
+  return e("div", {
+    className: "inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.08)] bg-white/[0.02] px-3 py-1.5 font-mono text-[11px] text-dim"
+  }, e("span", {
+    className: "h-1.5 w-1.5 rounded-full bg-red-500 rec-dot"
+  }), e("span", {
+    className: "text-muted"
+  }, "LIVE"), e("span", {
+    className: "text-dim"
+  }, "·"), e("span", null, `session ${mins}:${secs}`));
+}
+
+/* ─────────────────────────── Nav / progress ─────────────────────────── */
 
 function ScrollProgress() {
   const [progress, setProgress] = useState(0);
@@ -357,18 +385,15 @@ function ScrollProgress() {
     });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  return /*#__PURE__*/React.createElement("div", {
+  return e("div", {
     className: "fixed top-0 left-0 right-0 z-[60] h-[2px] bg-[rgba(255,255,255,0.04)]"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "h-full scroll-progress",
     style: {
       width: `${progress}%`
     }
   }));
 }
-
-/* ─── Back to Top ─── */
-
 function BackToTop() {
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -378,14 +403,14 @@ function BackToTop() {
     });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  return /*#__PURE__*/React.createElement("button", {
+  return e("button", {
     onClick: () => window.scrollTo({
       top: 0,
       behavior: "smooth"
     }),
     className: `fixed bottom-8 right-8 z-40 flex h-11 w-11 items-center justify-center rounded-full bg-cyan/10 text-cyan ring-1 ring-cyan/30 transition-all duration-500 hover:bg-cyan/20 hover:shadow-[0_0_20px_rgba(0,212,255,0.15)] ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0 pointer-events-none"}`,
     "aria-label": "Back to top"
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, e("svg", {
     width: "18",
     height: "18",
     viewBox: "0 0 24 24",
@@ -394,43 +419,10 @@ function BackToTop() {
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("polyline", {
+  }, e("polyline", {
     points: "18 15 12 9 6 15"
   })));
 }
-
-/* ─── Tilt Card ─── */
-
-function TiltCard({
-  children,
-  className = ""
-}) {
-  const ref = useRef(null);
-  const handleMouseMove = e => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = (y - centerY) / centerY * -6;
-    const rotateY = (x - centerX) / centerX * 6;
-    ref.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01,1.01,1.01)`;
-  };
-  const handleMouseLeave = () => {
-    if (!ref.current) return;
-    ref.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)";
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    ref: ref,
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
-    className: `tilt-card ${className}`
-  }, children);
-}
-
-/* ─── Navbar ─── */
-
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -441,7 +433,7 @@ function Navbar() {
     });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-  const links = ["About", "Projects", "Skills", "Insights", "Terminal", "Contact"];
+  const links = ["About", "Experience", "Projects", "Skills", "Achievements", "Terminal", "Contact"];
   const scrollTo = id => {
     setMenuOpen(false);
     const el = document.getElementById(id.toLowerCase());
@@ -449,105 +441,103 @@ function Navbar() {
       behavior: "smooth"
     });
   };
-  return /*#__PURE__*/React.createElement("nav", {
-    className: `fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-space/80 border-b border-[rgba(255,255,255,0.04)] backdrop-blur-xl" : "bg-transparent"}`
-  }, /*#__PURE__*/React.createElement("div", {
+  return e("nav", {
+    className: `fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? "bg-space/85 border-b border-[rgba(255,255,255,0.05)] backdrop-blur-xl" : "bg-transparent"}`
+  }, e("div", {
     className: "mx-auto flex h-14 max-w-6xl items-center justify-between px-5"
-  }, /*#__PURE__*/React.createElement("button", {
+  }, e("button", {
     onClick: () => window.scrollTo({
       top: 0,
       behavior: "smooth"
     }),
     className: "font-mono text-sm font-bold tracking-wider text-cyan"
-  }, "saurabh", /*#__PURE__*/React.createElement("span", {
+  }, "ritik", e("span", {
     className: "text-muted"
-  }, "201.in")), /*#__PURE__*/React.createElement("div", {
-    className: "hidden items-center gap-1 md:flex"
-  }, links.map(l => /*#__PURE__*/React.createElement("button", {
+  }, ".dev")), e("div", {
+    className: "hidden items-center gap-1 lg:flex"
+  }, links.map(l => e("button", {
     key: l,
     onClick: () => scrollTo(l),
     className: "rounded-lg px-3 py-1.5 font-mono text-[13px] text-muted transition hover:bg-white/[0.04] hover:text-ink"
-  }, l))), /*#__PURE__*/React.createElement("button", {
+  }, l))), e("button", {
     onClick: () => setMenuOpen(!menuOpen),
-    className: "relative z-50 grid h-8 w-8 place-items-center text-muted md:hidden"
-  }, /*#__PURE__*/React.createElement("span", {
+    className: "relative z-50 grid h-8 w-8 place-items-center text-muted lg:hidden"
+  }, e("span", {
     className: `block h-0.5 w-5 rounded bg-current transition-all ${menuOpen ? "translate-y-[3.5px] rotate-45" : ""}`
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: `mt-[3px] block h-0.5 w-5 rounded bg-current transition-all ${menuOpen ? "opacity-0" : ""}`
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: `mt-[3px] block h-0.5 w-5 rounded bg-current transition-all ${menuOpen ? "-translate-y-[3.5px] -rotate-45" : ""}`
-  }))), menuOpen && /*#__PURE__*/React.createElement("div", {
-    className: "absolute inset-x-0 top-14 border-b border-[rgba(255,255,255,0.04)] bg-space/95 backdrop-blur-xl md:hidden"
-  }, /*#__PURE__*/React.createElement("div", {
+  }))), menuOpen && e("div", {
+    className: "absolute inset-x-0 top-14 border-b border-[rgba(255,255,255,0.05)] bg-space/95 backdrop-blur-xl lg:hidden"
+  }, e("div", {
     className: "flex flex-col gap-1 px-5 py-4"
-  }, links.map(l => /*#__PURE__*/React.createElement("button", {
+  }, links.map(l => e("button", {
     key: l,
     onClick: () => scrollTo(l),
     className: "rounded-lg px-3 py-2.5 text-left font-mono text-sm text-muted transition hover:bg-white/[0.04] hover:text-ink"
   }, l)))));
 }
 
-/* ─── Hero ─── */
+/* ─────────────────────────── Hero ─────────────────────────── */
 
 function Hero() {
   const typedRole = useTypewriter(roles);
   const [showCursor, setShowCursor] = useState(true);
   useEffect(() => {
-    const interval = setInterval(() => setShowCursor(value => !value), 520);
+    const interval = setInterval(() => setShowCursor(v => !v), 520);
     return () => clearInterval(interval);
   }, []);
-  return /*#__PURE__*/React.createElement("section", {
+  return e("section", {
     className: "relative z-10 flex min-h-screen items-center px-5"
-  }, /*#__PURE__*/React.createElement(ParticleField, null), /*#__PURE__*/React.createElement("div", {
+  }, e(ParticleField, null), e("div", {
     className: "float-glow pointer-events-none absolute -top-40 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-cyan/5 blur-[120px] opacity-30"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), e("div", {
     className: "hero-orb hero-orb-a pointer-events-none absolute left-[12%] top-[24%] h-24 w-24 rounded-full bg-cyan/10 blur-3xl"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), e("div", {
     className: "hero-orb hero-orb-b pointer-events-none absolute right-[10%] top-[18%] h-28 w-28 rounded-full bg-purple/10 blur-3xl"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), e("div", {
     className: "mx-auto w-full max-w-6xl pt-20"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "reveal is-visible"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, e("div", {
+    className: "reveal is-visible flex items-center gap-3"
+  }, e("p", {
     className: "font-mono text-sm text-cyan/80"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "text-muted"
-  }, "$"), " whoami"), /*#__PURE__*/React.createElement("h1", {
-    className: "hero-headline mt-4 font-display text-[clamp(2.2rem,7vw,5rem)] font-bold leading-[0.92] tracking-tight"
-  }, "Building Software", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+  }, "$"), " whoami"), e(FeedBadge, null)), e("h1", {
+    className: "hero-headline mt-4 font-display text-[clamp(2.1rem,6.6vw,4.6rem)] font-bold leading-[0.95] tracking-tight"
+  }, "Ritik Kumar Singh —", e("br", null), e("span", {
     className: "hero-gradient text-transparent bg-clip-text bg-gradient-to-r from-cyan via-purple to-cyan"
-  }, "That Solves Real Problems."))), /*#__PURE__*/React.createElement("div", {
-    className: "reveal is-visible mt-4 flex items-center gap-2 font-mono text-lg sm:text-xl",
+  }, "Engineering Real-Time Systems.")), e("div", {
+    className: "reveal is-visible mt-5 flex items-center gap-2 font-mono text-lg sm:text-xl",
     style: {
       transitionDelay: "0.08s"
     }
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "text-muted"
-  }, ">"), /*#__PURE__*/React.createElement("span", {
+  }, ">"), e("span", {
     className: "min-h-[1.75rem] text-ink"
-  }, typedRole), /*#__PURE__*/React.createElement("span", {
+  }, typedRole), e("span", {
     className: `inline-block h-5 w-[2px] bg-cyan transition-opacity duration-150 ${showCursor ? "opacity-100" : "opacity-0"}`
-  })), /*#__PURE__*/React.createElement("p", {
+  })), e("p", {
     className: "reveal is-visible mt-6 max-w-xl leading-relaxed text-muted",
     style: {
       transitionDelay: "0.16s"
     }
-  }, "B.Tech CSE Student at NIET. 350+ DSA problems solved. Building scalable applications with React, Node.js, and Java."), /*#__PURE__*/React.createElement("div", {
+  }, "Final-year CSE student at IIIT Guwahati, currently building a real-time CCTV streaming platform at Renu Electronics with the MERN stack, AWS Kinesis, and WebRTC."), e("div", {
     className: "reveal is-visible mt-8 flex flex-wrap gap-3",
     style: {
       transitionDelay: "0.24s"
     }
-  }, /*#__PURE__*/React.createElement("a", {
+  }, e("a", {
     href: "#projects",
     className: "inline-flex items-center gap-2 rounded-lg bg-cyan/10 px-5 py-2.5 font-mono text-sm font-medium text-cyan ring-1 ring-cyan/30 transition-all hover:bg-cyan/20 hover:ring-cyan/50 hover:shadow-[0_0_20px_rgba(0,212,255,0.15)]"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "text-muted"
-  }, "$"), " view_projects"), /*#__PURE__*/React.createElement("a", {
-    href: "Resume.pdf",
-    target: "_blank",
-    rel: "noreferrer",
+  }, "$"), " view_projects"), e("a", {
+    href: "mailto:ritiksingh1915@gmail.com",
     className: "inline-flex items-center gap-2 rounded-lg border border-[rgba(255,255,255,0.08)] bg-white/[0.03] px-5 py-2.5 font-mono text-sm font-medium text-muted transition-all hover:border-[rgba(255,255,255,0.15)] hover:bg-white/[0.06] hover:text-ink"
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, e("svg", {
     width: "14",
     height: "14",
     viewBox: "0 0 24 24",
@@ -556,127 +546,135 @@ function Hero() {
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "7 10 12 15 17 10"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "12",
-    y1: "15",
-    x2: "12",
-    y2: "3"
-  })), "resume.pdf")), /*#__PURE__*/React.createElement("div", {
-    className: "reveal is-visible mt-20 flex items-center gap-3 text-xs text-dim",
+  }, e("rect", {
+    x: "2",
+    y: "4",
+    width: "20",
+    height: "16",
+    rx: "2"
+  }), e("polyline", {
+    points: "22 6 12 13 2 6"
+  })), "get in touch")), e("div", {
+    className: "reveal is-visible mt-16 flex items-center gap-3 text-xs text-dim",
     style: {
       transitionDelay: "0.32s"
     }
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "h-px w-8 bg-[rgba(255,255,255,0.06)]"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "font-mono tracking-wider uppercase soft-pulse"
-  }, "Explore below"), /*#__PURE__*/React.createElement("span", {
+  }, "Explore below"), e("span", {
     className: "h-px w-8 bg-[rgba(255,255,255,0.06)]"
   }))));
 }
 
-/* ─── About / Stats ─── */
+/* ─────────────────────────── About ─────────────────────────── */
 
-function StatsCard({
-  icon,
-  label,
-  value,
-  index
-}) {
-  return /*#__PURE__*/React.createElement("div", {
+function StatsCard(props) {
+  return e("div", {
     className: "group rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/50 p-6 transition-all hover:border-cyan/20 hover:bg-card/80 hover:shadow-[0_0_30px_rgba(0,212,255,0.05)]"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, e("p", {
     className: "text-2xl"
-  }, icon), /*#__PURE__*/React.createElement("p", {
+  }, props.icon), e("p", {
     className: "mt-3 font-display text-2xl font-bold"
-  }, value), /*#__PURE__*/React.createElement("p", {
+  }, props.value), e("p", {
     className: "mt-1 text-sm text-muted"
-  }, label));
+  }, props.label));
 }
 function AboutSection() {
-  return /*#__PURE__*/React.createElement("section", {
+  const stats = [{
+    icon: "🎓",
+    label: "Education",
+    value: "IIIT Guwahati"
+  }, {
+    icon: "💻",
+    label: "DSA Problems",
+    value: "400+"
+  }, {
+    icon: "📡",
+    label: "Current Focus",
+    value: "Real-Time Streaming"
+  }, {
+    icon: "🏆",
+    label: "JEE Mains '22",
+    value: "Top 2.5%"
+  }];
+  return e("section", {
     id: "about",
     className: "py-24 md:py-32"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(SectionLabel, null, "About"), /*#__PURE__*/React.createElement("h2", {
+  }, e(ScrollReveal, null, e(SectionLabel, null, "About"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Who Am I"), /*#__PURE__*/React.createElement("p", {
-    className: "mt-1 font-display text-xl text-ink/90"
-  }, "Saurabh Kumar Singh"), /*#__PURE__*/React.createElement("p", {
-    className: "mt-2 max-w-2xl leading-relaxed text-muted"
-  }, "I design systems, build scalable applications, and solve complex problems. My work sits at the intersection of thoughtful engineering and practical user experiences.")), /*#__PURE__*/React.createElement("div", {
+  }, "Who I Am"), e("p", {
+    className: "mt-4 max-w-2xl leading-relaxed text-muted"
+  }, "I'm a final-year Computer Science and Engineering student at IIIT Guwahati, drawn to systems where correctness and latency both matter — real-time video pipelines, scheduling frameworks, and full-stack products people actually use. I like taking something from a rough idea to a working, deployed system.")), e("div", {
     className: "mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
-  }, [{
-    icon: "\uD83C\uDF93",
-    label: "Education",
-    value: "NIET, CSE IoT"
-  }, {
-    icon: "\uD83D\uDCBB",
-    label: "DSA Problems",
-    value: "350+"
-  }, {
-    icon: "\uD83D\uDE80",
-    label: "Projects",
-    value: "3+"
-  }, {
-    icon: "\uD83D\uDCDA",
-    label: "Learning",
-    value: "System Design"
-  }].map((s, i) => /*#__PURE__*/React.createElement(StatsCard, _extends({
-    key: s.label
-  }, s, {
-    index: i
-  }))))));
+  }, stats.map((s, i) => e(ScrollReveal, {
+    key: s.label,
+    delay: 0.06 * i
+  }, e(StatsCard, s))))));
 }
 
-/* ─── Projects ─── */
+/* ─────────────────────────── Experience ─────────────────────────── */
 
-function ProjectCard({
-  project,
-  index
-}) {
-  const {
-    title,
-    tag,
-    desc,
-    highlights,
-    stack,
-    href,
-    demo,
-    accent
-  } = project;
-  return /*#__PURE__*/React.createElement(TiltCard, {
-    className: "h-full"
-  }, /*#__PURE__*/React.createElement("article", {
+function ExperienceSection() {
+  return e("section", {
+    id: "experience",
+    className: "py-24 md:py-32"
+  }, e("div", {
+    className: "mx-auto max-w-6xl px-5"
+  }, e(ScrollReveal, null, e(SectionLabel, null, "Experience"), e("h2", {
+    className: "mt-2 font-display text-3xl font-bold md:text-4xl"
+  }, "Where I'm Working")), e(ScrollReveal, {
+    delay: 0.1
+  }, e("div", {
+    className: "hover-card glow-border mt-8 rounded-2xl border border-[rgba(255,255,255,0.05)] bg-card/40 p-7 md:p-9"
+  }, e("div", {
+    className: "flex flex-wrap items-start justify-between gap-3"
+  }, e("div", null, e("h3", {
+    className: "font-display text-2xl font-bold"
+  }, experience.role), e("p", {
+    className: "mt-1 font-mono text-sm text-cyan"
+  }, experience.company)), e("span", {
+    className: "rounded-md bg-white/[0.04] px-3 py-1.5 font-mono text-[12px] text-dim ring-1 ring-[rgba(255,255,255,0.05)]"
+  }, experience.period)), e("ul", {
+    className: "mt-6 space-y-3"
+  }, experience.points.map((p, i) => e("li", {
+    key: i,
+    className: "flex gap-3 text-sm leading-relaxed text-muted"
+  }, e("span", {
+    className: "mt-1 text-cyan"
+  }, "▸"), e("span", null, p))))))));
+}
+
+/* ─────────────────────────── Projects ─────────────────────────── */
+
+function ProjectCard(props) {
+  const p = props.project;
+  return e("article", {
     className: "group hover-card glow-border relative flex h-full flex-col overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.05)] bg-card/40 transition-all duration-300 hover:-translate-y-1 hover:border-cyan/20 hover:shadow-[0_20px_60px_rgba(0,212,255,0.06)]"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "absolute inset-x-0 top-0 h-px opacity-70",
     style: {
-      background: `linear-gradient(90deg, transparent, ${accent}, transparent)`
+      background: `linear-gradient(90deg, transparent, ${p.accent}, transparent)`
     }
-  }), /*#__PURE__*/React.createElement("div", {
+  }), e("div", {
     className: "flex flex-1 flex-col p-6 md:p-7"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "flex flex-wrap items-start justify-between gap-3"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "inline-block rounded-md px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider",
     style: {
-      color: accent,
-      backgroundColor: `${accent}18`
+      color: p.accent,
+      backgroundColor: `${p.accent}18`
     }
-  }, tag), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-2"
-  }, demo && /*#__PURE__*/React.createElement("a", {
-    href: demo,
+  }, p.tag), p.href && e("a", {
+    href: p.href,
     target: "_blank",
     rel: "noreferrer",
     className: "flex items-center gap-1.5 rounded-md bg-white/[0.04] px-3 py-1.5 font-mono text-[12px] text-muted transition-all hover:bg-white/[0.08] hover:text-ink"
-  }, /*#__PURE__*/React.createElement("svg", {
+  }, e("svg", {
     width: "12",
     height: "12",
     viewBox: "0 0 24 24",
@@ -685,234 +683,219 @@ function ProjectCard({
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "15 3 21 3 21 9"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "10",
-    y1: "14",
-    x2: "21",
-    y2: "3"
-  })), "Live"), href && /*#__PURE__*/React.createElement("a", {
-    href: href,
-    target: "_blank",
-    rel: "noreferrer",
-    className: "flex items-center gap-1.5 rounded-md bg-white/[0.04] px-3 py-1.5 font-mono text-[12px] text-muted transition-all hover:bg-white/[0.08] hover:text-ink"
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "12",
-    height: "12",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
+  }, e("path", {
     d: "M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-  })), "Code"))), /*#__PURE__*/React.createElement("h3", {
+  })), "Code")), e("h3", {
     className: "mt-4 font-display text-2xl font-bold md:text-3xl"
-  }, title), /*#__PURE__*/React.createElement("p", {
+  }, p.title), e("p", {
     className: "mt-2 text-sm leading-relaxed text-muted"
-  }, desc), /*#__PURE__*/React.createElement("div", {
+  }, p.desc), e("div", {
     className: "mt-5"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, e("p", {
     className: "font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-dim"
-  }, "Highlights")), /*#__PURE__*/React.createElement("div", {
+  }, "Highlights")), e("div", {
     className: "mt-3 flex flex-wrap gap-1.5"
-  }, highlights.map(h => /*#__PURE__*/React.createElement("span", {
+  }, p.highlights.map(h => e("span", {
     key: h,
     className: "rounded-md bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-dim ring-1 ring-[rgba(255,255,255,0.04)]"
-  }, h))), /*#__PURE__*/React.createElement("div", {
+  }, h))), e("div", {
     className: "mt-auto pt-6"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, e("p", {
     className: "font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-dim"
-  }, "Stack"), /*#__PURE__*/React.createElement("div", {
+  }, "Stack"), e("div", {
     className: "mt-3 flex flex-wrap gap-2"
-  }, stack.map(t => /*#__PURE__*/React.createElement("span", {
+  }, p.stack.map(t => e("span", {
     key: t,
-    className: "rounded-md px-2.5 py-1 font-mono text-[11px] font-medium transition-all",
+    className: "rounded-md px-2.5 py-1 font-mono text-[11px] font-medium",
     style: {
-      color: accent,
-      backgroundColor: `${accent}14`
+      color: p.accent,
+      backgroundColor: `${p.accent}14`
     }
-  }, t)))))));
+  }, t))))));
 }
 function ProjectsSection() {
-  return /*#__PURE__*/React.createElement("section", {
+  return e("section", {
     id: "projects",
     className: "py-24 md:py-32"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, null, /*#__PURE__*/React.createElement(SectionLabel, null, "Projects"), /*#__PURE__*/React.createElement("h2", {
+  }, e(ScrollReveal, null, e(SectionLabel, null, "Projects"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Projects"), /*#__PURE__*/React.createElement("p", {
+  }, "Projects"), e("p", {
     className: "mt-4 max-w-2xl leading-relaxed text-muted"
-  }, "Real products with real users. Each built from scratch with a focus on architecture, performance, and user experience.")), /*#__PURE__*/React.createElement("div", {
-    className: "mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
-  }, projects.map((p, i) => /*#__PURE__*/React.createElement(ScrollReveal, {
+  }, "From a service marketplace to a scheduling research framework — built from scratch, with a focus on architecture and shipping working software.")), e("div", {
+    className: "mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(0,1fr)]"
+  }, projects.map((p, i) => e(ScrollReveal, {
     key: p.id,
     delay: 0.06 * i,
-    rotate: true
-  }, /*#__PURE__*/React.createElement(ProjectCard, {
-    project: p,
-    index: i
-  }))))));
+    rotate: true,
+    className: p.span
+  }, e(TiltCard, {
+    className: "h-full"
+  }, e(ProjectCard, {
+    project: p
+  })))))));
 }
 
-/* ─── Tech Stack ─── */
+/* ─────────────────────────── Tech Stack ─────────────────────────── */
 
-function TechCard({
-  group,
-  index
-}) {
+function SkillBadge(props) {
+  return e("div", {
+    className: `flex items-center rounded-xl bg-[rgba(255,255,255,0.02)] px-3.5 py-2.5 ring-1 ring-[rgba(255,255,255,0.04)] transition-all duration-300 hover:bg-[rgba(255,255,255,0.04)] hover:ring-[rgba(255,255,255,0.08)] ${props.visible ? "translate-x-0 opacity-100" : "-translate-x-3 opacity-0"}`,
+    style: {
+      transitionDelay: `${props.delay + 0.2}s`
+    }
+  }, e("span", {
+    className: "font-mono text-sm text-muted"
+  }, props.name));
+}
+function TechCard(props) {
   const [ref, isVisible] = useInView();
   const colors = ["#00d4ff", "#7c5cfc", "#34d399", "#f59e0b", "#f472b6"];
-  return /*#__PURE__*/React.createElement("div", {
+  const c = colors[props.index % colors.length];
+  const group = props.group;
+  return e("div", {
     ref: ref,
     className: `group relative overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.05)] bg-gradient-to-br from-card/50 to-card/20 p-6 backdrop-blur-sm transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,212,255,0.06)] ${isVisible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`,
     style: {
-      transitionDelay: `${0.08 * index}s`,
-      transitionProperty: "all",
-      transitionDuration: "0.6s",
-      transitionTimingFunction: "ease"
+      transitionDelay: `${0.08 * props.index}s`
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "absolute inset-x-0 top-0 h-[2px] opacity-0 transition-opacity duration-500 group-hover:opacity-100",
     style: {
-      background: `linear-gradient(90deg, transparent, ${colors[index % colors.length]}, transparent)`
+      background: `linear-gradient(90deg, transparent, ${c}, transparent)`
     }
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "pointer-events-none absolute -inset-20 opacity-0 transition-opacity duration-700 group-hover:opacity-[0.08]",
-    style: {
-      background: `radial-gradient(circle at 50% 0%, ${colors[index % colors.length]}, transparent 70%)`
-    }
-  }), /*#__PURE__*/React.createElement("div", {
+  }), e("div", {
     className: "relative flex items-center gap-3"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "flex h-10 w-10 items-center justify-center rounded-xl font-mono text-base font-bold transition-all duration-300 group-hover:shadow-lg",
+  }, e("span", {
+    className: "flex h-10 w-10 items-center justify-center rounded-xl font-mono text-base font-bold",
     style: {
-      backgroundColor: `${colors[index % colors.length]}18`,
-      color: colors[index % colors.length],
-      boxShadow: isVisible ? `0 0 20px ${colors[index % colors.length]}10` : "none"
+      backgroundColor: `${c}18`,
+      color: c
     }
-  }, group.icon), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+  }, group.icon), e("div", null, e("p", {
     className: "font-mono text-xs font-semibold uppercase tracking-[0.2em]",
     style: {
-      color: colors[index % colors.length]
+      color: c
     }
-  }, group.category), /*#__PURE__*/React.createElement("p", {
+  }, group.category), e("p", {
     className: "mt-0.5 font-mono text-[11px] text-dim"
-  }, group.items.length, " technologies"))), /*#__PURE__*/React.createElement("div", {
+  }, `${group.items.length} technologies`))), e("div", {
     className: "relative mt-6 space-y-2.5"
-  }, group.items.map((item, idx) => /*#__PURE__*/React.createElement(SkillBadge, {
+  }, group.items.map((item, idx) => e(SkillBadge, {
     key: item,
     name: item,
-    level: skillLevels[item] || 75,
-    color: colors[index % colors.length],
     delay: idx * 0.06,
     visible: isVisible
   }))));
 }
-function SkillBadge({
-  name,
-  delay,
-  visible
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: `flex items-center rounded-xl bg-[rgba(255,255,255,0.02)] px-3.5 py-2.5 ring-1 ring-[rgba(255,255,255,0.04)] transition-all duration-300 hover:bg-[rgba(255,255,255,0.04)] hover:ring-[rgba(255,255,255,0.08)] ${visible ? "translate-x-0 opacity-100" : "-translate-x-3 opacity-0"}`,
-    style: {
-      transitionDelay: `${delay + 0.2}s`,
-      transitionProperty: "all",
-      transitionDuration: "0.5s",
-      transitionTimingFunction: "ease"
-    }
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "font-mono text-sm text-muted transition-colors duration-300 group-hover:text-ink"
-  }, name));
-}
 function TechSection() {
-  return /*#__PURE__*/React.createElement("section", {
+  return e("section", {
     id: "skills",
     className: "relative overflow-hidden py-24 md:py-32"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "pointer-events-none absolute inset-0"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "absolute -top-40 left-1/4 h-80 w-80 rounded-full bg-cyan/5 blur-[120px]"
-  }), /*#__PURE__*/React.createElement("div", {
+  }), e("div", {
     className: "absolute -bottom-40 right-1/4 h-80 w-80 rounded-full bg-purple/5 blur-[120px]"
-  })), /*#__PURE__*/React.createElement("div", {
+  })), e("div", {
     className: "relative mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, null, /*#__PURE__*/React.createElement(SectionLabel, null, "Tech Stack"), /*#__PURE__*/React.createElement("h2", {
+  }, e(ScrollReveal, null, e(SectionLabel, null, "Tech Stack"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Technical Arsenal"), /*#__PURE__*/React.createElement("p", {
+  }, "Technical Arsenal"), e("p", {
     className: "mt-4 max-w-xl leading-relaxed text-muted"
-  }, "Technologies I use daily to design, build, and ship production-grade software.")), /*#__PURE__*/React.createElement("div", {
+  }, "Languages, frameworks, and tools I reach for when building and shipping software.")), e("div", {
     className: "mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
-  }, techStack.map((group, i) => /*#__PURE__*/React.createElement(TechCard, {
+  }, techStack.map((group, i) => e(TechCard, {
     key: group.category,
     group: group,
     index: i
   })))));
 }
 
-/* ─── DSA ─── */
+/* ─────────────────────────── Achievements ─────────────────────────── */
 
-function DSASection() {
-  const [countRef, count] = useCountUp(350, 1, 1200);
-  const codeLines = ["$ solve graph shortest_path", "", "Analyzing graph...", "Vertices: 6, Edges: 8", "Running Dijkstra's algorithm...", "", "Result:", "  Distance to all nodes computed", "  Time Complexity: O(E log V)", "  Space Complexity: O(V)", "", "✓ Accepted"];
-  const typedCode = codeLines.join("\n");
-  return /*#__PURE__*/React.createElement("section", {
-    id: "dsa",
+function AchievementsSection() {
+  const [countRef, count] = useCountUp(400, 1200);
+  const codeLines = ["$ stream --pipeline camera-01", "", "Negotiating WebRTC session...", "ICE candidates gathered: 4", "Publishing to AWS Kinesis Video Streams", "", "Status:", "  Latency: ~180ms", "  Codec: H.264 (FFmpeg transcode)", "", "✓ Stream live"];
+  return e("section", {
+    id: "achievements",
     className: "relative overflow-hidden py-24 md:py-32"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, null, /*#__PURE__*/React.createElement(SectionLabel, null, "DSA Journey"), /*#__PURE__*/React.createElement("h2", {
+  }, e(ScrollReveal, null, e(SectionLabel, null, "Achievements"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "350+ Problems Solved")), /*#__PURE__*/React.createElement("div", {
+  }, "400+ Problems Solved")), e("div", {
     className: "mt-8 grid gap-6 lg:grid-cols-2"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, {
+  }, e(ScrollReveal, {
     rotate: true
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     ref: countRef,
     className: "hover-card glow-border flex flex-col items-center justify-center rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/30 p-10"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, e("p", {
     className: "font-display count-up text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan to-purple md:text-8xl"
-  }, count), /*#__PURE__*/React.createElement("p", {
+  }, `${count}+`), e("p", {
     className: "mt-2 font-mono text-sm text-muted"
-  }, "Problems Solved"), /*#__PURE__*/React.createElement("p", {
+  }, "Problems Solved"), e("p", {
     className: "mt-1 text-xs text-dim"
-  }, "Across LeetCode, GFG, and Codeforces"), /*#__PURE__*/React.createElement("div", {
+  }, "Across LeetCode and CodeChef"), e("div", {
     className: "mt-8 flex flex-wrap justify-center gap-2"
-  }, dsaTopics.map(t => /*#__PURE__*/React.createElement("span", {
+  }, dsaTopics.map(t => e("span", {
     key: t,
     className: "rounded-md bg-white/[0.04] px-3 py-1.5 font-mono text-[12px] text-dim ring-1 ring-[rgba(255,255,255,0.04)]"
-  }, t))))), /*#__PURE__*/React.createElement(ScrollReveal, {
+  }, t))))), e(ScrollReveal, {
     delay: 0.12,
     rotate: true
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "hover-card glow-border rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0d0d14] p-5 font-mono text-sm leading-relaxed shadow-inner"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "flex items-center gap-2 border-b border-[rgba(255,255,255,0.06)] pb-3"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "h-3 w-3 rounded-full bg-red-500/60"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "h-3 w-3 rounded-full bg-yellow-500/60"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "h-3 w-3 rounded-full bg-green-500/60"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "ml-2 text-[11px] text-dim"
-  }, "terminal \u2014 dsa@portfolio")), /*#__PURE__*/React.createElement("pre", {
+  }, "terminal — kinesis@renu")), e("pre", {
     className: "mt-3 overflow-x-auto text-[13px] text-muted"
-  }, /*#__PURE__*/React.createElement("code", null, typedCode)))))));
+  }, e("code", null, codeLines.join("\n")))))), e(ScrollReveal, {
+    delay: 0.15
+  }, e("div", {
+    className: "mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+  }, achievements.map(a => e("div", {
+    key: a.label,
+    className: "rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/30 p-5"
+  }, e("p", {
+    className: "font-mono text-[11px] uppercase tracking-wider text-dim"
+  }, a.label), e("p", {
+    className: "mt-2 font-display text-xl font-bold text-cyan"
+  }, a.value), e("p", {
+    className: "mt-1 text-xs leading-relaxed text-muted"
+  }, a.detail))))), e(ScrollReveal, {
+    delay: 0.2
+  }, e("div", {
+    className: "mt-4 grid gap-4 sm:grid-cols-2"
+  }, responsibilities.map(r => e("div", {
+    key: r.title,
+    className: "rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/30 p-5"
+  }, e("p", {
+    className: "font-display font-semibold"
+  }, r.title), e("p", {
+    className: "mt-0.5 font-mono text-[12px] text-cyan"
+  }, r.org), e("p", {
+    className: "mt-2 text-sm leading-relaxed text-muted"
+  }, r.desc)))))));
 }
 
-/* ─── Terminal ─── */
+/* ─────────────────────────── Terminal ─────────────────────────── */
 
 function TerminalSection() {
   const [history, setHistory] = useState([{
     type: "system",
-    text: "Welcome to saurabh@portfolio:~$"
+    text: "Welcome to ritik@portfolio:~$"
   }, {
     type: "system",
     text: 'Type "help" for available commands.'
@@ -920,15 +903,14 @@ function TerminalSection() {
   const [input, setInput] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const inputRef = useRef();
-  const bottomRef = useRef();
+  const scrollContainerRef = useRef();
   useEffect(() => {
     const interval = setInterval(() => setShowCursor(v => !v), 530);
     return () => clearInterval(interval);
   }, []);
   useEffect(() => {
-    if (bottomRef.current) bottomRef.current.scrollIntoView({
-      behavior: "smooth"
-    });
+    if (!scrollContainerRef.current) return;
+    scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
   }, [history]);
   const handleCommand = useCallback(cmd => {
     const trimmed = cmd.trim().toLowerCase();
@@ -940,9 +922,6 @@ function TerminalSection() {
     if (trimmed === "clear") {
       setHistory([]);
       return;
-    }
-    if (trimmed === "resume") {
-      window.open("Resume.pdf", "_blank");
     }
     const cmdData = terminalCommands[trimmed];
     if (cmdData) {
@@ -957,563 +936,168 @@ function TerminalSection() {
       }]);
     }
   }, []);
-  const terminalRef = useRef();
-  const scrollContainerRef = useRef();
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-  useEffect(() => {
-    if (!scrollContainerRef.current) return;
-    scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-  }, [history]);
   const onSubmit = () => {
     if (!input.trim()) return;
     handleCommand(input);
     setInput("");
-    requestAnimationFrame(() => inputRef.current?.focus());
+    requestAnimationFrame(() => {
+      if (inputRef.current) inputRef.current.focus();
+    });
   };
-  return /*#__PURE__*/React.createElement(Section, {
+  return e("section", {
     id: "terminal",
-    className: "relative"
-  }, /*#__PURE__*/React.createElement("div", {
+    className: "py-24 md:py-32"
+  }, e("div", {
     className: "mx-auto max-w-4xl px-5"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, null, /*#__PURE__*/React.createElement(SectionLabel, null, "Terminal"), /*#__PURE__*/React.createElement("h2", {
+  }, e(ScrollReveal, null, e(SectionLabel, null, "Terminal"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Interactive Shell"), /*#__PURE__*/React.createElement("p", {
+  }, "Interactive Shell"), e("p", {
     className: "mt-4 max-w-xl leading-relaxed text-muted"
-  }, "Try typing ", /*#__PURE__*/React.createElement("span", {
+  }, "Type ", e("span", {
     className: "font-mono text-cyan"
-  }, "help"), " to explore my profile from the command line.")), /*#__PURE__*/React.createElement(ScrollReveal, {
+  }, "help"), " to explore my profile from the command line.")), e(ScrollReveal, {
     delay: 0.2
-  }, /*#__PURE__*/React.createElement("div", {
-    ref: terminalRef,
+  }, e("div", {
     className: "mt-8 overflow-hidden rounded-xl border border-[rgba(255,255,255,0.06)] bg-[#0a0a10] shadow-[0_0_40px_rgba(0,0,0,0.3)]",
     onClick: () => {
       if (inputRef.current) inputRef.current.focus();
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "flex items-center gap-2 border-b border-[rgba(255,255,255,0.06)] px-4 py-2.5"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "h-3 w-3 rounded-full bg-red-500/60"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "h-3 w-3 rounded-full bg-yellow-500/60"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "h-3 w-3 rounded-full bg-green-500/60"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: "ml-2 font-mono text-[11px] text-dim"
-  }, "saurabh@portfolio \u2014 bash")), /*#__PURE__*/React.createElement("div", {
+  }, "ritik@portfolio — bash")), e("div", {
     ref: scrollContainerRef,
     className: "max-h-80 overflow-y-auto p-4 font-mono text-[14px] leading-relaxed"
-  }, history.map((line, i) => /*#__PURE__*/React.createElement("div", {
+  }, history.map((line, i) => e("div", {
     key: i,
     className: line.type === "input" ? "text-ink" : line.type === "error" ? "text-red-400" : line.type === "system" ? "text-dim" : "text-muted"
-  }, line.text)), /*#__PURE__*/React.createElement("div", {
+  }, line.text)), e("div", {
     className: "mt-1 flex items-center"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "text-cyan"
-  }, "$"), /*#__PURE__*/React.createElement("span", {
+  }, "$"), e("span", {
     className: "mx-1 text-dim"
-  }, ">"), /*#__PURE__*/React.createElement("input", {
+  }, ">"), e("input", {
     ref: inputRef,
     type: "text",
     value: input,
-    onChange: e => setInput(e.target.value),
-    onKeyDown: e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
+    onChange: ev => setInput(ev.target.value),
+    onKeyDown: ev => {
+      if (ev.key === "Enter") {
+        ev.preventDefault();
         onSubmit();
       }
     },
     className: "flex-1 bg-transparent outline-none text-ink caret-cyan",
     autoComplete: "off",
     spellCheck: "false"
-  }), /*#__PURE__*/React.createElement("span", {
+  }), e("span", {
     className: `text-cyan ${showCursor ? "opacity-100" : "opacity-0"}`
   }, "_")))))));
 }
 
-/* ─── Contact ─── */
+/* ─────────────────────────── Contact ─────────────────────────── */
 
-/* ─── EmailJS setup ───
- * Replace these with the IDs from https://dashboard.emailjs.com/admin
- * Template variables expected by this form: from_name, from_email, message
- */
-const EMAILJS_PUBLIC_KEY = "A7-F_iISlemaGJLp8";
-const EMAILJS_SERVICE_ID = "service_64zuwru";
-const EMAILJS_TEMPLATE_ID = "template_4e87wtk";
-function ContactSection() {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: ""
-  });
-  const [status, setStatus] = useState("idle");
-  const [feedback, setFeedback] = useState("");
-  const handleSubmit = async e => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
-    setStatus("sending");
-    setFeedback("");
+function CopyableLine(props) {
+  const [copied, setCopied] = useState(false);
+  const doCopy = async () => {
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        from_name: form.name,
-        from_email: form.email,
-        message: form.message
-      }, EMAILJS_PUBLIC_KEY);
-      setStatus("sent");
-      setFeedback("Your message was sent successfully.");
-      setForm({
-        name: "",
-        email: "",
-        message: ""
-      });
-    } catch (error) {
-      setStatus("error");
-      setFeedback(error?.text || error?.message || "Something went wrong.");
-    }
+      await navigator.clipboard.writeText(props.value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (err) {/* clipboard unavailable — no-op */}
   };
-  return /*#__PURE__*/React.createElement(Section, {
-    id: "contact"
-  }, /*#__PURE__*/React.createElement("div", {
+  return e("button", {
+    onClick: doCopy,
+    className: "group flex w-full items-center justify-between rounded-lg border border-[rgba(255,255,255,0.05)] bg-white/[0.02] px-4 py-2.5 text-left transition hover:border-cyan/20"
+  }, e("div", null, e("p", {
+    className: "font-mono text-[10px] uppercase tracking-wider text-dim"
+  }, props.label), e("p", {
+    className: "mt-0.5 font-mono text-sm text-ink"
+  }, props.value)), e("span", {
+    className: "font-mono text-[11px] text-cyan opacity-0 transition group-hover:opacity-100"
+  }, copied ? "copied" : "copy"));
+}
+function ContactSection() {
+  return e("section", {
+    id: "contact",
+    className: "py-24 md:py-32"
+  }, e("div", {
     className: "mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, null, /*#__PURE__*/React.createElement(SectionLabel, null, "Contact"), /*#__PURE__*/React.createElement("h2", {
+  }, e(ScrollReveal, null, e(SectionLabel, null, "Contact"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Get In Touch"), /*#__PURE__*/React.createElement("p", {
+  }, "Get In Touch"), e("p", {
     className: "mt-4 max-w-xl leading-relaxed text-muted"
-  }, "I am open to internships, full-time roles, and opportunities to build great products.")), /*#__PURE__*/React.createElement("div", {
+  }, "I'm open to SDE internship and full-time roles. Reach out directly — no forms, just the fastest path to a reply.")), e("div", {
     className: "mt-8 grid gap-6 lg:grid-cols-2"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, {
-    delay: 0.15
-  }, /*#__PURE__*/React.createElement("form", {
-    onSubmit: handleSubmit,
-    className: "rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/40 p-6 backdrop-blur-sm"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "space-y-4"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "font-mono text-[11px] font-semibold uppercase tracking-wider text-dim"
-  }, "Name"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    value: form.name,
-    onChange: e => setForm({
-      ...form,
-      name: e.target.value
-    }),
-    disabled: status === "sending",
-    className: "mt-1.5 w-full rounded-lg border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] px-3 py-2.5 font-mono text-sm text-ink outline-none transition-all focus:border-cyan/30 focus:shadow-[0_0_12px_rgba(0,212,255,0.06)]",
-    placeholder: "Your name",
-    required: true
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "font-mono text-[11px] font-semibold uppercase tracking-wider text-dim"
-  }, "Email"), /*#__PURE__*/React.createElement("input", {
-    type: "email",
-    value: form.email,
-    onChange: e => setForm({
-      ...form,
-      email: e.target.value
-    }),
-    disabled: status === "sending",
-    className: "mt-1.5 w-full rounded-lg border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] px-3 py-2.5 font-mono text-sm text-ink outline-none transition-all focus:border-cyan/30 focus:shadow-[0_0_12px_rgba(0,212,255,0.06)]",
-    placeholder: "your@email.com",
-    required: true
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "font-mono text-[11px] font-semibold uppercase tracking-wider text-dim"
-  }, "Message"), /*#__PURE__*/React.createElement("textarea", {
-    value: form.message,
-    onChange: e => setForm({
-      ...form,
-      message: e.target.value
-    }),
-    rows: 4,
-    disabled: status === "sending",
-    className: "mt-1.5 w-full resize-none rounded-lg border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] px-3 py-2.5 font-mono text-sm text-ink outline-none transition-all focus:border-cyan/30 focus:shadow-[0_0_12px_rgba(0,212,255,0.06)]",
-    placeholder: "Your message",
-    required: true
-  })), /*#__PURE__*/React.createElement("button", {
-    type: "submit",
-    disabled: status === "sending",
-    className: "w-full rounded-lg bg-cyan/10 px-5 py-2.5 font-mono text-sm font-medium text-cyan ring-1 ring-cyan/30 transition-all hover:bg-cyan/20 hover:ring-cyan/50 hover:shadow-[0_0_20px_rgba(0,212,255,0.12)]"
-  }, status === "sending" ? "Sending..." : status === "sent" ? "✓ Message sent!" : "$ send_message"), feedback && /*#__PURE__*/React.createElement("p", {
-    className: `font-mono text-xs ${status === "error" ? "text-red-400" : "text-cyan"}`
-  }, feedback)))), /*#__PURE__*/React.createElement(ScrollReveal, {
-    delay: 0.25
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e(ScrollReveal, {
+    delay: 0.1
+  }, e("div", {
     className: "flex flex-col gap-3"
-  }, contacts.map(c => /*#__PURE__*/React.createElement("a", {
+  }, e(CopyableLine, {
+    label: "Email",
+    value: "ritiksingh1915@gmail.com"
+  }), e(CopyableLine, {
+    label: "Phone",
+    value: "+91-6203172327"
+  }))), e(ScrollReveal, {
+    delay: 0.2
+  }, e("div", {
+    className: "flex flex-col gap-3"
+  }, contacts.map(c => e("a", {
     key: c.label,
     href: c.href,
     target: "_blank",
     rel: "noreferrer",
     className: "group hover-card glow-border flex items-center gap-3 rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/30 px-5 py-3.5 transition-all hover:border-cyan/15 hover:bg-card/60"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "font-mono text-sm text-cyan/60"
-  }, ">"), /*#__PURE__*/React.createElement("span", {
+  }, ">"), e("span", {
     className: "font-mono text-sm text-muted transition-all group-hover:text-ink"
-  }, c.label), /*#__PURE__*/React.createElement("span", {
-    className: "ml-auto text-xs text-dim"
+  }, c.label), e("span", {
+    className: "ml-auto text-xs text-dim truncate max-w-[220px]"
   }, c.href.replace("https://", "").replace("mailto:", "")))))))));
 }
 
-/* ─── Footer ─── */
+/* ─────────────────────────── Footer ─────────────────────────── */
 
 function Footer() {
-  return /*#__PURE__*/React.createElement("footer", {
+  return e("footer", {
     className: "border-t border-[rgba(255,255,255,0.04)] py-8"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, e("div", {
     className: "flex flex-col items-center justify-between gap-4 md:flex-row"
-  }, /*#__PURE__*/React.createElement("p", {
+  }, e("p", {
     className: "font-mono text-sm text-dim"
-  }, /*#__PURE__*/React.createElement("span", {
+  }, e("span", {
     className: "text-cyan"
-  }, "$"), " saurabh", /*#__PURE__*/React.createElement("span", {
+  }, "$"), " ritik", e("span", {
     className: "text-muted"
-  }, "201.in")), /*#__PURE__*/React.createElement("p", {
+  }, ".dev")), e("p", {
     className: "font-mono text-[13px] text-dim"
-  }, "\xA9 2026 Saurabh Kumar Singh \u2014 built with purpose"))));
+  }, "© 2026 Ritik Kumar Singh — built with purpose"))));
 }
 
-/* ─── Things I've Figured Out ─── */
-
-function ArticleCard({
-  article,
-  onClick,
-  index
-}) {
-  const [hovered, setHovered] = useState(false);
-  return /*#__PURE__*/React.createElement(ScrollReveal, {
-    delay: 0.2 + index * 0.08
-  }, /*#__PURE__*/React.createElement("article", {
-    onClick: onClick,
-    onMouseEnter: () => setHovered(true),
-    onMouseLeave: () => setHovered(false),
-    className: "group relative cursor-pointer overflow-hidden rounded-xl border border-[rgba(255,255,255,0.05)] bg-card/40 p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,212,255,0.06)]",
-    style: {
-      borderColor: hovered ? `${article.categoryColor}40` : 'rgba(255,255,255,0.05)',
-      boxShadow: hovered ? `0 0 30px ${article.categoryColor}10` : 'none'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between gap-3"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-3"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "font-mono text-[12px] text-dim"
-  }, article.date), /*#__PURE__*/React.createElement("span", {
-    className: "inline-block rounded-md px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider",
-    style: {
-      color: article.categoryColor,
-      backgroundColor: `${article.categoryColor}18`
-    }
-  }, article.category))), /*#__PURE__*/React.createElement("h3", {
-    className: "mt-4 font-display text-xl font-bold leading-snug md:text-2xl"
-  }, article.title), /*#__PURE__*/React.createElement("p", {
-    className: "mt-2 text-sm leading-relaxed text-muted line-clamp-2"
-  }, article.preview), /*#__PURE__*/React.createElement("div", {
-    className: "mt-4 flex items-center gap-2 text-[13px] font-medium transition-all",
-    style: {
-      color: hovered ? article.categoryColor : '#585878'
-    }
-  }, /*#__PURE__*/React.createElement("span", null, "Read article"), /*#__PURE__*/React.createElement("svg", {
-    width: "14",
-    height: "14",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    className: "transition-all",
-    style: {
-      transform: hovered ? 'translateX(4px)' : 'translateX(0)'
-    }
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "5",
-    y1: "12",
-    x2: "19",
-    y2: "12"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "12 5 19 12 12 19"
-  })))));
-}
-function ArticleModal({
-  article,
-  onClose
-}) {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const contentRef = useRef();
-  const [activeHeading, setActiveHeading] = useState("");
-  const tocItems = useMemo(() => {
-    return article.content.filter(s => s.type === "h2").map(s => s.text);
-  }, [article]);
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    const onScroll = () => {
-      const {
-        scrollTop,
-        scrollHeight,
-        clientHeight
-      } = el;
-      const progress = scrollTop / (scrollHeight - clientHeight);
-      setScrollProgress(Math.min(progress, 1));
-      const headings = el.querySelectorAll("h2");
-      let current = "";
-      headings.forEach(h => {
-        const rect = h.getBoundingClientRect();
-        if (rect.top <= 120) current = h.textContent;
-      });
-      setActiveHeading(current);
-    };
-    el.addEventListener("scroll", onScroll, {
-      passive: true
-    });
-    return () => el.removeEventListener("scroll", onScroll);
-  }, []);
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, []);
-  useEffect(() => {
-    const handleEsc = e => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
-  const scrollToHeading = text => {
-    const el = contentRef.current;
-    if (!el) return;
-    const headings = el.querySelectorAll("h2");
-    for (const h of headings) {
-      if (h.textContent === text) {
-        h.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-        break;
-      }
-    }
-  };
-  const renderContent = section => {
-    switch (section.type) {
-      case "h2":
-        return /*#__PURE__*/React.createElement("h2", {
-          className: "mt-10 mb-4 font-display text-2xl font-bold md:text-3xl",
-          id: section.text.replace(/\s+/g, "-").toLowerCase()
-        }, section.text);
-      case "h3":
-        return /*#__PURE__*/React.createElement("h3", {
-          className: "mt-6 mb-3 font-display text-lg font-semibold text-ink/90"
-        }, section.text);
-      case "p":
-        return /*#__PURE__*/React.createElement("p", {
-          className: "mb-4 leading-relaxed text-muted"
-        }, section.text);
-      case "blockquote":
-        return /*#__PURE__*/React.createElement("blockquote", {
-          className: "my-6 border-l-2 border-cyan/50 pl-5 italic text-ink/80"
-        }, section.text);
-      case "code":
-        return /*#__PURE__*/React.createElement("pre", {
-          className: "my-4 overflow-x-auto rounded-lg bg-[#0d0d14] p-4 font-mono text-[13px] leading-relaxed text-muted ring-1 ring-[rgba(255,255,255,0.06)]"
-        }, /*#__PURE__*/React.createElement("code", null, section.text));
-      case "ul":
-        return /*#__PURE__*/React.createElement("ul", {
-          className: "mb-4 list-disc space-y-1.5 pl-5 text-muted"
-        }, section.items.map((item, i) => /*#__PURE__*/React.createElement("li", {
-          key: i,
-          className: "leading-relaxed"
-        }, item)));
-      case "ol":
-        return /*#__PURE__*/React.createElement("ol", {
-          className: "mb-4 list-decimal space-y-1.5 pl-5 text-muted"
-        }, section.items.map((item, i) => /*#__PURE__*/React.createElement("li", {
-          key: i,
-          className: "leading-relaxed"
-        }, item)));
-      default:
-        return null;
-    }
-  };
-  return /*#__PURE__*/React.createElement("div", {
-    className: "fixed inset-0 z-[100] flex"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "absolute inset-0 bg-surface/95",
-    onClick: onClose
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "relative mx-auto flex h-full w-full max-w-6xl flex-col"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "sticky top-0 z-10 h-1 bg-[rgba(255,255,255,0.06)]"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "h-full transition-all duration-150",
-    style: {
-      width: `${scrollProgress * 100}%`,
-      backgroundColor: article.categoryColor,
-      boxShadow: `0 0 12px ${article.categoryColor}`
-    }
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-1 overflow-hidden"
-  }, /*#__PURE__*/React.createElement("div", {
-    ref: contentRef,
-    className: "flex-1 overflow-y-auto px-5 pb-20 pt-8 md:px-12 lg:px-16 bg-surface"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "mx-auto max-w-3xl"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-3"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "font-mono text-[13px] text-dim"
-  }, article.date), /*#__PURE__*/React.createElement("span", {
-    className: "inline-block rounded-md px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider",
-    style: {
-      color: article.categoryColor,
-      backgroundColor: `${article.categoryColor}18`
-    }
-  }, article.category), /*#__PURE__*/React.createElement("span", {
-    className: "font-mono text-[12px] text-dim"
-  }, article.readingTime)), /*#__PURE__*/React.createElement("button", {
-    onClick: onClose,
-    className: "flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.04] text-muted transition-all hover:bg-white/[0.08] hover:text-ink"
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "16",
-    height: "16",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "18",
-    y1: "6",
-    x2: "6",
-    y2: "18"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "6",
-    y1: "6",
-    x2: "18",
-    y2: "18"
-  })))), /*#__PURE__*/React.createElement("h1", {
-    className: "mt-6 font-display text-3xl font-bold leading-tight md:text-4xl lg:text-5xl"
-  }, article.title), /*#__PURE__*/React.createElement("p", {
-    className: "mt-4 text-base leading-relaxed text-muted/80 md:text-lg"
-  }, article.preview), /*#__PURE__*/React.createElement("div", {
-    className: "mt-6 flex flex-wrap gap-2"
-  }, article.topics.map(topic => /*#__PURE__*/React.createElement("span", {
-    key: topic,
-    className: "rounded-md bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-dim ring-1 ring-[rgba(255,255,255,0.04)]"
-  }, topic))), /*#__PURE__*/React.createElement("hr", {
-    className: "my-8 border-[rgba(255,255,255,0.06)]"
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "article-content"
-  }, article.content.map((section, i) => /*#__PURE__*/React.createElement("div", {
-    key: i
-  }, renderContent(section)))))), /*#__PURE__*/React.createElement("div", {
-    className: "hidden w-64 shrink-0 border-l border-[rgba(255,255,255,0.04)] bg-surface p-6 lg:block"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "font-mono text-[11px] font-semibold uppercase tracking-wider text-dim"
-  }, "On this page"), /*#__PURE__*/React.createElement("nav", {
-    className: "mt-4 flex flex-col gap-1.5"
-  }, tocItems.map(item => /*#__PURE__*/React.createElement("button", {
-    key: item,
-    onClick: () => scrollToHeading(item),
-    className: `text-left text-[13px] transition-all ${activeHeading === item ? "text-ink font-medium" : "text-dim hover:text-muted"}`
-  }, item)))))));
-}
-function InsightsSection() {
-  const [articles, setArticles] = useState([]);
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("All");
-  const [selectedArticle, setSelectedArticle] = useState(null);
-  useEffect(() => {
-    fetch("articles.json").then(res => res.json()).then(setArticles).catch(() => {});
-  }, []);
-  const categories = ["All", "Algorithms", "Data Structures", "Distributed Systems", "Databases", "Computer Networks", "React", "Operating Systems"];
-  const filtered = articles.filter(a => {
-    const q = search.toLowerCase();
-    const matchSearch = !q || a.title.toLowerCase().includes(q) || a.preview.toLowerCase().includes(q) || a.topics.some(t => t.toLowerCase().includes(q)) || a.category.toLowerCase().includes(q);
-    const matchCategory = category === "All" || a.category === category;
-    return matchSearch && matchCategory;
-  });
-  return /*#__PURE__*/React.createElement(Section, {
-    id: "insights"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "mx-auto max-w-6xl px-5"
-  }, /*#__PURE__*/React.createElement(ScrollReveal, null, /*#__PURE__*/React.createElement(SectionLabel, null, "Insights"), /*#__PURE__*/React.createElement("h2", {
-    className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Things I've Figured Out"), /*#__PURE__*/React.createElement("p", {
-    className: "mt-4 max-w-2xl leading-relaxed text-muted"
-  }, "Notes on algorithms, systems, computer science,", /*#__PURE__*/React.createElement("br", null), "and engineering ideas worth remembering.")), /*#__PURE__*/React.createElement(ScrollReveal, {
-    delay: 0.1
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "relative mt-8"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-dim",
-    width: "14",
-    height: "14",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "11",
-    cy: "11",
-    r: "8"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "21",
-    y1: "21",
-    x2: "16.65",
-    y2: "16.65"
-  })), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    value: search,
-    onChange: e => setSearch(e.target.value),
-    placeholder: "Search insights...",
-    className: "w-full rounded-xl border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.03)] py-3 pl-10 pr-4 font-mono text-sm text-ink outline-none transition-all placeholder:text-dim focus:border-cyan/30 focus:shadow-[0_0_20px_rgba(0,212,255,0.06)]"
-  }))), /*#__PURE__*/React.createElement(ScrollReveal, {
-    delay: 0.15
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-none"
-  }, categories.map(cat => /*#__PURE__*/React.createElement("button", {
-    key: cat,
-    onClick: () => setCategory(cat),
-    className: `shrink-0 rounded-lg px-3.5 py-1.5 font-mono text-[13px] transition-all ${category === cat ? "bg-cyan/10 text-cyan ring-1 ring-cyan/30" : "bg-white/[0.03] text-muted ring-1 ring-[rgba(255,255,255,0.04)] hover:bg-white/[0.06] hover:text-ink"}`
-  }, cat)))), /*#__PURE__*/React.createElement("div", {
-    className: "mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-  }, filtered.length > 0 ? filtered.map((a, i) => /*#__PURE__*/React.createElement(ArticleCard, {
-    key: a.id,
-    article: a,
-    index: i,
-    onClick: () => setSelectedArticle(a)
-  })) : /*#__PURE__*/React.createElement("div", {
-    className: "col-span-full py-16 text-center"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "font-mono text-sm text-dim"
-  }, "No insights match your search.")))), selectedArticle && /*#__PURE__*/React.createElement(ArticleModal, {
-    article: selectedArticle,
-    onClose: () => setSelectedArticle(null)
-  }));
-}
-
-/* ─── App ─── */
+/* ─────────────────────────── App ─────────────────────────── */
 
 function App() {
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if ("scrollRestoration" in window.history) {
-        window.history.scrollRestoration = "manual";
-      }
+      if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
       window.scrollTo(0, 0);
       requestAnimationFrame(() => window.scrollTo(0, 0));
     }
   }, []);
-  return /*#__PURE__*/React.createElement("div", {
+  return e("div", {
     className: "relative min-h-screen bg-space selection:bg-cyan/20 selection:text-ink"
-  }, /*#__PURE__*/React.createElement(ScrollProgress, null), /*#__PURE__*/React.createElement(Navbar, null), /*#__PURE__*/React.createElement(Hero, null), /*#__PURE__*/React.createElement(AboutSection, null), /*#__PURE__*/React.createElement(ProjectsSection, null), /*#__PURE__*/React.createElement(TechSection, null), /*#__PURE__*/React.createElement(DSASection, null), /*#__PURE__*/React.createElement(InsightsSection, null), /*#__PURE__*/React.createElement(TerminalSection, null), /*#__PURE__*/React.createElement(ContactSection, null), /*#__PURE__*/React.createElement(Footer, null), /*#__PURE__*/React.createElement(BackToTop, null));
+  }, e(ScrollProgress, null), e(Navbar, null), e(Hero, null), e(AboutSection, null), e(ExperienceSection, null), e(ProjectsSection, null), e(TechSection, null), e(AchievementsSection, null), e(TerminalSection, null), e(ContactSection, null), e(Footer, null), e(BackToTop, null));
 }
-ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
+ReactDOM.createRoot(document.getElementById("root")).render(e(App, null));
