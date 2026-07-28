@@ -8,67 +8,37 @@ const {
 
 /* ─────────────────────────── Data ─────────────────────────── */
 
+const GITHUB_USERNAME = "ritik190803";
 const roles = ["Software Engineer", "Full-Stack Developer", "SDE Intern @ Renu Electronics", "Real-Time Systems Enthusiast"];
-const projects = [{
+
+/* Used only if the live GitHub fetch fails (offline, rate-limited, etc.) */
+const FALLBACK_PROJECTS = [{
   id: "cryuze",
   title: "Cryuze",
   tag: "Service Marketplace",
   desc: "A full-stack MERN marketplace connecting users with services — secure auth, live chat, and payments, built to handle real booking workflows end to end.",
-  highlights: ["JWT Auth & RBAC", "Razorpay Payments", "Socket.IO Live Chat", "Responsive Tailwind UI"],
-  stack: ["React", "Node.js", "Express", "MongoDB", "Socket.IO", "Razorpay"],
+  highlights: ["JWT Auth & RBAC", "Razorpay Payments", "Socket.IO Live Chat"],
+  stack: ["React", "Node.js", "Express", "MongoDB", "Socket.IO"],
   href: "https://github.com/ritik190803/CRYUZE",
-  span: "lg:col-span-2 lg:row-span-2",
   accent: "#00d4ff"
 }, {
   id: "qate",
   title: "QATE",
   tag: "Research · Scheduling",
-  desc: "Quality-Aware Task Execution — a reward-driven scheduling framework for heterogeneous real-time systems, simulating task assignment across cores for higher throughput.",
-  highlights: ["Deadline-Critical Scheduling", "Energy-Efficiency Optimization", "Throughput Analysis"],
+  desc: "Quality-Aware Task Execution — a reward-driven scheduling framework for heterogeneous real-time systems.",
+  highlights: ["Deadline-Critical Scheduling", "Energy-Efficiency Optimization"],
   stack: ["Python"],
   href: "https://github.com/ritik190803/QATE",
-  span: "lg:col-span-2",
   accent: "#7c5cfc"
 }, {
   id: "fakecurrency",
   title: "Fake Currency Detection",
   tag: "Computer Vision",
   desc: "An ML pipeline that flags counterfeit ₹500 notes by comparing structural similarity against genuine reference images.",
-  highlights: ["Image Comparison", "SSIM Analysis", "OpenCV Pipeline"],
-  stack: ["Python", "OpenCV", "ML"],
+  highlights: ["Image Comparison", "SSIM Analysis"],
+  stack: ["Python", "OpenCV"],
   href: "https://github.com/ritik190803/Fake-Currency-Detection",
-  span: "",
   accent: "#34d399"
-}, {
-  id: "bezier",
-  title: "Bézier Curve Simulation",
-  tag: "Physics · Visualization",
-  desc: "A playful experiment rendering cubic Bézier curves as dynamic, springy ropes — with auto-simulation and a precise manual 'architect' mode.",
-  highlights: ["Physics-Based Motion", "Canvas Rendering", "Interactive Controls"],
-  stack: ["JavaScript", "HTML5 Canvas"],
-  href: "https://github.com/ritik190803/Flam-B-zier-Curve-Simulation-Project",
-  span: "",
-  accent: "#f59e0b"
-}, {
-  id: "shoesui",
-  title: "Shoes UI Template",
-  tag: "Frontend Template",
-  desc: "An early-stage shoe-shop storefront focused on a clean, user-friendly layout for showcasing footwear products.",
-  highlights: ["Component Library", "Product Grid", "Responsive Layout"],
-  stack: ["React"],
-  href: "https://github.com/ritik190803/Shoes-Ui-Template-react",
-  span: "",
-  accent: "#f472b6"
-}, {
-  id: "contactui",
-  title: "Contact UI React",
-  tag: "Form System",
-  desc: "A reusable React contact form for collecting and storing name, email, and message data with a clean, minimal layout.",
-  highlights: ["Form Validation", "Clean UX", "Reusable Components"],
-  stack: ["React"],
-  href: "https://github.com/ritik190803/Contact_UI_React",
-  span: "",
-  accent: "#14b8a6"
 }];
 const techStack = [{
   category: "Languages",
@@ -151,7 +121,7 @@ const terminalCommands = {
     output: ["Languages:  Java, Python, JavaScript, TypeScript, SQL, C/C++", "Web:        React, Angular, Node.js, Express.js, Tailwind CSS", "Cloud:      AWS, AWS Kinesis, WebRTC, FFmpeg", "DevOps:     Docker, Git, GitLab, GitHub, Linux", "Core:       DSA, OOP, OS, Computer Networks, DBMS"]
   },
   projects: {
-    output: ["Cryuze         — Service Marketplace (MERN, Socket.IO, Razorpay)", "QATE           — Real-Time Task Scheduling Research (Python)", "Fake Currency Detection — Computer Vision (Python, OpenCV)", "Bézier Curve Simulation — Physics Visualization (JS, Canvas)"]
+    output: ["Live project list is pulled from GitHub — type the section name", "or scroll to Projects to see it, since repos change over time."]
   },
   achievements: {
     output: ["400+ problems solved — LeetCode & CodeChef", "JEE Mains 2022 — AIR 23,853 (97.4 percentile)", "NTSE & Science Olympiad qualifier"]
@@ -163,6 +133,88 @@ const terminalCommands = {
     output: ["> ritik", "", "A developer who ships real-time systems, not just demos.", "Thinks in pipelines. Debugs with patience."]
   }
 };
+const ACCENT_PALETTE = ["#00d4ff", "#7c5cfc", "#34d399", "#f59e0b", "#f472b6", "#14b8a6", "#facc15", "#38bdf8"];
+
+/* ─────────────────────────── Helpers ─────────────────────────── */
+
+function titleCase(str) {
+  return str.replace(/[-_]+/g, " ").replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+}
+function formatRepoName(name) {
+  // Keep already-uppercase acronym-style names (e.g. "QATE") as-is.
+  if (name === name.toUpperCase() && /[A-Z]/.test(name)) return name;
+  return titleCase(name);
+}
+function timeAgo(dateStr) {
+  const diffMs = Date.now() - new Date(dateStr).getTime();
+  const days = Math.floor(diffMs / 86400000);
+  if (days <= 0) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months}mo ago`;
+  return `${Math.floor(months / 12)}y ago`;
+}
+function mapRepoToProject(repo, index) {
+  const topics = Array.isArray(repo.topics) ? repo.topics.filter(Boolean) : [];
+  const stack = [];
+  if (repo.language) stack.push(repo.language);
+  topics.forEach(t => {
+    const formatted = titleCase(t);
+    if (!stack.includes(formatted)) stack.push(formatted);
+  });
+  const highlights = topics.length ? topics.slice(0, 4).map(titleCase) : [repo.language ? `${repo.language} Project` : "Public Repository", "Open Source"];
+  const tag = topics.length ? titleCase(topics[0]) : repo.language ? `${repo.language} Project` : "Project";
+  return {
+    id: String(repo.id),
+    title: formatRepoName(repo.name),
+    tag: tag,
+    desc: repo.description ? repo.description : "No description provided yet — check the repository for details.",
+    highlights: highlights,
+    stack: stack.length ? stack.slice(0, 6) : ["—"],
+    href: repo.html_url,
+    demo: repo.homepage && /^https?:\/\//.test(repo.homepage) ? repo.homepage : null,
+    stars: repo.stargazers_count || 0,
+    updated: repo.pushed_at,
+    accent: ACCENT_PALETTE[index % ACCENT_PALETTE.length]
+  };
+}
+
+/* Live GitHub repo fetch — keeps the Projects section in sync with the actual account */
+function useGithubProjects(username) {
+  const [projects, setProjects] = useState(null); // null = still loading
+  const [source, setSource] = useState("loading"); // 'loading' | 'live' | 'fallback'
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=pushed`, {
+      headers: {
+        Accept: "application/vnd.github+json"
+      }
+    }).then(res => {
+      if (!res.ok) throw new Error(`GitHub API responded ${res.status}`);
+      return res.json();
+    }).then(repos => {
+      if (cancelled || !Array.isArray(repos)) return;
+      const mapped = repos.filter(r => !r.fork && r.name.toLowerCase() !== username.toLowerCase()).sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)).map(mapRepoToProject);
+      if (mapped.length) {
+        setProjects(mapped);
+        setSource("live");
+      } else {
+        setProjects(FALLBACK_PROJECTS);
+        setSource("fallback");
+      }
+    }).catch(() => {
+      if (cancelled) return;
+      setProjects(FALLBACK_PROJECTS);
+      setSource("fallback");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [username]);
+  return [projects, source];
+}
 
 /* ─────────────────────────── Hooks ─────────────────────────── */
 
@@ -262,8 +314,8 @@ function TiltCard(props) {
     const y = ev.clientY - rect.top;
     const cx = rect.width / 2,
       cy = rect.height / 2;
-    const rotateX = (y - cy) / cy * -6;
-    const rotateY = (x - cx) / cx * 6;
+    const rotateX = (y - cy) / cy * -5;
+    const rotateY = (x - cx) / cx * 5;
     ref.current.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01,1.01,1.01)`;
   };
   const handleMouseLeave = () => {
@@ -653,14 +705,14 @@ function ExperienceSection() {
 function ProjectCard(props) {
   const p = props.project;
   return e("article", {
-    className: "group hover-card glow-border relative flex h-full flex-col overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.05)] bg-card/40 transition-all duration-300 hover:-translate-y-1 hover:border-cyan/20 hover:shadow-[0_20px_60px_rgba(0,212,255,0.06)]"
+    className: "group hover-card glow-border relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(255,255,255,0.05)] bg-card/40 transition-all duration-300 hover:-translate-y-1 hover:border-cyan/20 hover:shadow-[0_20px_60px_rgba(0,212,255,0.06)]"
   }, e("div", {
     className: "absolute inset-x-0 top-0 h-px opacity-70",
     style: {
       background: `linear-gradient(90deg, transparent, ${p.accent}, transparent)`
     }
   }), e("div", {
-    className: "flex flex-1 flex-col p-6 md:p-7"
+    className: "flex flex-col p-6 md:p-7"
   }, e("div", {
     className: "flex flex-wrap items-start justify-between gap-3"
   }, e("span", {
@@ -669,7 +721,32 @@ function ProjectCard(props) {
       color: p.accent,
       backgroundColor: `${p.accent}18`
     }
-  }, p.tag), p.href && e("a", {
+  }, p.tag), e("div", {
+    className: "flex items-center gap-2"
+  }, p.demo && e("a", {
+    href: p.demo,
+    target: "_blank",
+    rel: "noreferrer",
+    className: "flex items-center gap-1.5 rounded-md bg-white/[0.04] px-3 py-1.5 font-mono text-[12px] text-muted transition-all hover:bg-white/[0.08] hover:text-ink"
+  }, e("svg", {
+    width: "12",
+    height: "12",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, e("path", {
+    d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+  }), e("polyline", {
+    points: "15 3 21 3 21 9"
+  }), e("line", {
+    x1: "10",
+    y1: "14",
+    x2: "21",
+    y2: "3"
+  })), "Live"), p.href && e("a", {
     href: p.href,
     target: "_blank",
     rel: "noreferrer",
@@ -685,7 +762,7 @@ function ProjectCard(props) {
     strokeLinejoin: "round"
   }, e("path", {
     d: "M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-  })), "Code")), e("h3", {
+  })), "Code"))), e("h3", {
     className: "mt-4 font-display text-2xl font-bold md:text-3xl"
   }, p.title), e("p", {
     className: "mt-2 text-sm leading-relaxed text-muted"
@@ -699,7 +776,7 @@ function ProjectCard(props) {
     key: h,
     className: "rounded-md bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-dim ring-1 ring-[rgba(255,255,255,0.04)]"
   }, h))), e("div", {
-    className: "mt-auto pt-6"
+    className: "mt-5"
   }, e("p", {
     className: "font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-dim"
   }, "Stack"), e("div", {
@@ -711,28 +788,72 @@ function ProjectCard(props) {
       color: p.accent,
       backgroundColor: `${p.accent}14`
     }
-  }, t))))));
+  }, t)))), (p.stars !== undefined || p.updated) && e("div", {
+    className: "mt-5 flex items-center gap-3 border-t border-[rgba(255,255,255,0.05)] pt-4 font-mono text-[11px] text-dim"
+  }, p.stars !== undefined && e("span", {
+    className: "flex items-center gap-1"
+  }, e("svg", {
+    width: "12",
+    height: "12",
+    viewBox: "0 0 24 24",
+    fill: "currentColor"
+  }, e("path", {
+    d: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+  })), p.stars), p.updated && e("span", null, `updated ${timeAgo(p.updated)}`))));
+}
+function ProjectCardSkeleton() {
+  return e("div", {
+    className: "animate-pulse rounded-2xl border border-[rgba(255,255,255,0.05)] bg-card/30 p-6 md:p-7"
+  }, e("div", {
+    className: "h-5 w-24 rounded bg-white/[0.06]"
+  }), e("div", {
+    className: "mt-5 h-7 w-2/3 rounded bg-white/[0.06]"
+  }), e("div", {
+    className: "mt-3 h-4 w-full rounded bg-white/[0.05]"
+  }), e("div", {
+    className: "mt-2 h-4 w-5/6 rounded bg-white/[0.05]"
+  }), e("div", {
+    className: "mt-6 flex gap-2"
+  }, e("div", {
+    className: "h-6 w-16 rounded bg-white/[0.05]"
+  }), e("div", {
+    className: "h-6 w-20 rounded bg-white/[0.05]"
+  })));
 }
 function ProjectsSection() {
+  const [projects, source] = useGithubProjects(GITHUB_USERNAME);
   return e("section", {
     id: "projects",
     className: "py-24 md:py-32"
   }, e("div", {
     className: "mx-auto max-w-6xl px-5"
-  }, e(ScrollReveal, null, e(SectionLabel, null, "Projects"), e("h2", {
+  }, e(ScrollReveal, null, e("div", {
+    className: "flex flex-wrap items-center justify-between gap-3"
+  }, e("div", null, e(SectionLabel, null, "Projects"), e("h2", {
     className: "mt-2 font-display text-3xl font-bold md:text-4xl"
-  }, "Projects"), e("p", {
+  }, "Projects")), e("div", {
+    className: "inline-flex items-center gap-2 rounded-full border border-[rgba(255,255,255,0.08)] bg-white/[0.02] px-3 py-1.5 font-mono text-[11px] text-dim"
+  }, e("span", {
+    className: `h-1.5 w-1.5 rounded-full ${source === "loading" ? "bg-amber animate-pulse" : source === "live" ? "bg-green" : "bg-dim"}`
+  }), source === "loading" ? "syncing from GitHub…" : source === "live" ? "live from GitHub" : "cached snapshot", e("a", {
+    href: `https://github.com/${GITHUB_USERNAME}`,
+    target: "_blank",
+    rel: "noreferrer",
+    className: "ml-1 text-cyan hover:underline"
+  }, "view all →"))), e("p", {
     className: "mt-4 max-w-2xl leading-relaxed text-muted"
-  }, "From a service marketplace to a scheduling research framework — built from scratch, with a focus on architecture and shipping working software.")), e("div", {
-    className: "mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(0,1fr)]"
-  }, projects.map((p, i) => e(ScrollReveal, {
+  }, "Pulled straight from my public GitHub repos, so this list updates automatically as I ship, rename, or retire projects.")), e("div", {
+    className: "mt-8 columns-1 gap-5 sm:columns-2 lg:columns-3"
+  }, projects === null ? Array.from({
+    length: 6
+  }).map((_, i) => e("div", {
+    key: i,
+    className: "mb-5 break-inside-avoid"
+  }, e(ProjectCardSkeleton, null))) : projects.map((p, i) => e(ScrollReveal, {
     key: p.id,
-    delay: 0.06 * i,
-    rotate: true,
-    className: p.span
-  }, e(TiltCard, {
-    className: "h-full"
-  }, e(ProjectCard, {
+    delay: Math.min(0.06 * i, 0.36),
+    className: "mb-5 break-inside-avoid"
+  }, e(TiltCard, null, e(ProjectCard, {
     project: p
   })))))));
 }
